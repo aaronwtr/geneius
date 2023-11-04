@@ -17,7 +17,7 @@ class PubMedScraper:
         return config
 
     @staticmethod
-    def search_literature(query, retmax=50):
+    def search_literature(query, retmax=10):
         try:
             search_results = Entrez.esearch(db="pubmed", term=query, retmax=retmax, sort="relevance")
             record = Entrez.read(search_results)
@@ -31,21 +31,26 @@ class PubMedScraper:
         pubmed_ids = self.search_literature(query)
         literature_records = []
 
+        print("Extracting literature records...")
         for pubmed_id in tqdm(pubmed_ids):
             pubmed_record = Entrez.efetch(db="pubmed", id=pubmed_id, rettype="medline", retmode="text")
             subcontext = pubmed_record.read()
-            abstract, title = self.extract_abstract_and_title(subcontext)
-            literature_records.append([abstract, title])
+            abstract, title, doi = self.extract_paper_info(subcontext)
+            if doi == "":
+                doi = "DOI not found"
+            literature_records.append([abstract, title, doi])
         context = self.combine_context(literature_records)
         return context
 
     @staticmethod
-    def extract_abstract_and_title(data):
+    def extract_paper_info(data):
         lines = data.split('\n')
         abstract = ""
         title = ""
+        doi = ""
         inside_abstract = False
         inside_title = False
+        inside_doi = False
 
         for line in lines:
             if line.startswith("AB  - "):
@@ -54,6 +59,9 @@ class PubMedScraper:
             elif line.startswith("TI  - "):
                 inside_title = True
                 title += line[6:]
+            elif line.startswith("LID - "):
+                inside_doi = True
+                doi += line[6:]
             elif inside_abstract:
                 if line.startswith("  "):
                     abstract += " " + line.strip()
@@ -64,19 +72,17 @@ class PubMedScraper:
                     title += " " + line.strip()
                 else:
                     inside_title = False
-        return abstract, title
+            elif inside_doi:
+                if line.startswith("  "):
+                    doi += " " + line.strip()
+                else:
+                    inside_doi = False
+        return abstract, title, doi
 
 
     @staticmethod
     def combine_context(literature_records):
         claude_context = ""
-        for i, record in enumerate(literature_records):
-            claude_context += f"{i + 1} [Title]: {record[1]} \n [Abstract]: {record[0]}\n\n"
+        for record in literature_records:
+            claude_context += f"[Title]: {record[1]} \n [DOI]: {record[2]} \n [Abstract]: {record[0]}\n\n"
         return claude_context
-
-
-if __name__ == '__main__':
-    pms = PubMedScraper()
-
-    claude_context = pms.get_literature_context("TP53")
-    print(len(claude_context))

@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
+from anthropic import Anthropic
 
 import os
 import yaml
@@ -33,10 +33,3 @@ class Claude(Anthropic):
             prompt=prompt
         )
         return completion.completion
-
-
-if __name__ == "__main__":
-    claude = Claude()
-    prompt = f"{HUMAN_PROMPT} What is the best way to embed text into an embedding vector? {AI_PROMPT}"
-    response = claude.create_completion(prompt)
-    print(response)
