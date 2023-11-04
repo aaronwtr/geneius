@@ -7,6 +7,8 @@ import yaml
 
 class Claude(Anthropic):
     def __init__(self):
+        self.config = self.config()
+
         super().__init__(api_key=self.get_api_key())
 
     def get_api_key(self):
@@ -15,9 +17,7 @@ class Claude(Anthropic):
         return api_key
 
     def get_api_path(self):
-        # Load the path to your API configuration from config file
-        config = self.config()
-        api_path = config['paths']['secret']
+        api_path = self.config['paths']['secret']
         return api_path
 
     @staticmethod
@@ -37,6 +37,6 @@ class Claude(Anthropic):
 
 if __name__ == "__main__":
     claude = Claude()
-    prompt = f"{HUMAN_PROMPT} How many toes do dogs have?{AI_PROMPT}"
+    prompt = f"{HUMAN_PROMPT} What is the best way to embed text into an embedding vector? {AI_PROMPT}"
     response = claude.create_completion(prompt)
     print(response)
