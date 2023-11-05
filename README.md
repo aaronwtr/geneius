@@ -7,3 +7,11 @@ Task 1) Disease-Gene Link Validation: When presented with a hypothetical disease
 Task 2) Disease-Gene Link Hypothesis Generation: For users in need of insights about a specific disease, Geneius constructs a comprehensive disease context by extracting relevant information from the scientific literature. Claude searches and retrieves this literature, presenting users with a curated list of genes implicated in the disease based on scientific research. Furthermore, it elucidates the molecular mechanisms underpinning the involvement of these genes in the disease.
 
 Geneius was developed at the Anthropic AI Hackathon in London, on the fourth and the fifth of November 2023. More information here: [https://devpost.com/software/geneius](https://devpost.com/software/geneius)
+
+# Usage 
+**1) `pip install geneius`
+
+**2) Generate API Key for Claude**
+
+Go to [console.anthropic.com](console.anthropic.com) to request access to the Claude API. Once access has been granted, generate an API key and store this in a .env file in the Geneius folder. Make sure you format the Claude API secret as: 
+`CLAUDE_SECRET={{your_secret}}`.  
