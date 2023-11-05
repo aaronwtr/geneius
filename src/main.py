@@ -4,24 +4,37 @@ from anthropic import HUMAN_PROMPT, AI_PROMPT
 
 import time
 import math
+import argparse
 
 
-if __name__ == '__main__':
-    task = 1
+def main():
+    parser = argparse.ArgumentParser(description="Geneius: A tool for biomedical literature search and extraction.")
+    parser.add_argument("--task", type=int, choices=[1, 2], required=True, help="Task number (1 or 2)")
+    parser.add_argument("--disease", type=str, required=True, help="Disease name")
+    parser.add_argument("--gene", type=str, help="Gene name (only for Task 1)")
+    parser.add_argument("--num_evidence", type=int, help="Number of evidence (only for Task 1)")
+    parser.add_argument("--num_genes", type=int, help="Number of genes (only for Task 2)")
+    args = parser.parse_args()
 
-    # TASK 1: Given a disease and a gene, generate a disease context from the literature and use it to generate a
-    # response to elucidate the molecular mechanism of the gene's involvement in the disease.
+    start_time = time.time()
 
-    if task == 1:
-        start_time = time.time()
-        pms = PubMedScraper()
-        disease = "colorectal cancer"
-        gene = "APC"
-        num_evidence = 5
+    pms = PubMedScraper()
+    disease = args.disease
+
+    _claude = None
+    prompt = None
+    response = None
+    num_records = None
+
+    if args.task == 1:
+        if args.gene is None or args.num_evidence is None:
+            print("For Task 1, both --gene and --num_evidence are required.")
+            return
+        gene = args.gene
+        num_evidence = args.num_evidence
 
         context, num_records = pms.get_literature_context(disease)
-
-        claude = claude.Claude()
+        _claude = claude.Claude()
         prompt = f"{HUMAN_PROMPT} Imagine you are an expert researcher going through the literature to extract " \
                  f"{num_evidence} pieces of evidence implicating molecular involvement of gene {gene} in disease " \
                  f" {disease}. I want you to explain the molecular mechanism of the gene's involvement in " \
@@ -33,26 +46,15 @@ if __name__ == '__main__':
                  f"response should look like <response>[Title]: 'paper title'\n [DOI]:'doi'\n [Explanation]: This " \
                  f"paper suggests [gene] is linked to [disease] [reason]</response> Take care to complete all " \
                  f"fields of your response entirely. \n\n  <context>{context}</context> {AI_PROMPT}"
-        response = claude.create_completion(prompt)
 
-        print(response)
-
-        print(f"Collected and parsed through {num_records} scientific papers in: "
-              f"{(math.floor((time.time()-start_time)/60))} minutes and {math.floor((time.time()-start_time)% 60)} "
-              f"seconds.")
-
-    # TASK 2: Given a disease, find N genes that are implicated in the disease and generate a response to elucidate
-    # the molecular mechanism of the genes' involvement in the disease.
-
-    if task == 2:
-        start_time = time.time()
-        pms = PubMedScraper()
-        disease = "colorectal cancer"
-        num_genes = 5
+    elif args.task == 2:
+        if args.num_genes is None:
+            print("For Task 2, --num_genes is required.")
+            return
+        num_genes = args.num_genes
 
         context, num_records = pms.get_literature_context(disease)
-
-        claude = claude.Claude()
+        _claude = claude.Claude()
         prompt = f"{HUMAN_PROMPT} Imagine you are an expert researcher going through the literature to find " \
                  f"{num_genes} genes that are involved in {disease}, and corresponding evidence implicating  " \
                  f"molecular involvement of the genes in disease {disease}. I want you to explain " \
@@ -66,10 +68,14 @@ if __name__ == '__main__':
                  f"'paper title'\n [DOI]:'doi'\n [Explanation]: This paper suggests [gene] is linked to [disease] " \
                  f"[reason]</response> Take care to complete all fields of your response entirely. \n\n" \
                  f"<context>{context}</context> {AI_PROMPT}"
-        response = claude.create_completion(prompt)
+    response = _claude.create_completion(prompt)
 
-        print(response)
+    print(response)
 
-        print(f"Collected and parsed through {num_records} scientific papers in: "
-              f"{(math.floor((time.time()-start_time)/60))} minutes and {math.floor((time.time()-start_time)% 60)} "
-              f"seconds.")
+    print(f"Collected and parsed through {num_records} scientific papers in: "
+          f"{(math.floor((time.time() - start_time) / 60))} minutes and {math.floor((time.time() - start_time) % 60)} "
+          f"seconds.")
+
+
+if __name__ == '__main__':
+    main()
