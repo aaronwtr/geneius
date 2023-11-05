@@ -1,2 +1,2 @@
 paths:
-  secret: ../.env
+  secret: .env

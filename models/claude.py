@@ -22,14 +22,14 @@ class Claude(Anthropic):
 
     @staticmethod
     def config():
-        with open('../configs/claude.yml', 'r') as file:
+        with open('configs/claude.yml', 'r') as file:
             config = yaml.safe_load(file)
         return config
 
     def create_completion(self, prompt):
         completion = self.completions.create(
             model="claude-2",
-            max_tokens_to_sample=1000,
-            prompt=prompt
+            max_tokens_to_sample=600,
+            prompt=prompt,
         )
         return completion.completion
