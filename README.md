@@ -46,4 +46,6 @@ For task 1, set the following flags:
 - `--num_evidence={int: number_of_papers}` (the number of papers you want Geneius to return)
 
 For task 2, you only need to set the flag:
-- `--num_genes={int: number_of_genes}` (the number of genes you want Geneius to associate with the specified disease. 
+- `--num_genes={int: number_of_genes}` (the number of genes you want Geneius to associate with the specified disease.
+
+# TODO: Refactor code to not have email in .yml file.
