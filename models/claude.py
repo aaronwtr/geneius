@@ -29,7 +29,7 @@ class Claude(Anthropic):
     def create_completion(self, prompt):
         completion = self.completions.create(
             model="claude-2",
-            max_tokens_to_sample=300,
+            max_tokens_to_sample=1000,
             prompt=prompt
         )
         return completion.completion

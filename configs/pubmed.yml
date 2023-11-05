@@ -1,2 +1,5 @@
 user:
-  email: aaronwenteler@gmail.com
+  email: a.wenteler@qmul.ac.uk
+
+search:
+  retmax: 500
