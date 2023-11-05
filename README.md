@@ -1,4 +1,4 @@
-# Geneius
+# Geneius: Disease-gene hypothesis and validation powered by Anthropic AI's Claude
 
 ![image](https://github.com/aaronwtr/Geneius-AnthropicAI-Hackaton/assets/54633647/42386179-410c-4711-98c0-3d18932fbd70)
 
