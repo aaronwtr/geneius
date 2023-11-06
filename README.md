@@ -45,6 +45,8 @@ Store the disease you want to query the literature for in `--disease={str: your_
 
 **6) Set a num_records flag (REQUIRED)**
 
+Decide how many scientific papers Geneius will look through. Claude's 100k token context window permits a maximum of about 600 papers. `--num_records={int: num_records}`.
+
 <br>
 
 **7) Set task-dependent flags**
