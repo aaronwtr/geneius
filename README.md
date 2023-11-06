@@ -1,6 +1,6 @@
 ![image](https://github.com/aaronwtr/Geneius-AnthropicAI-Hackaton/assets/54633647/42386179-410c-4711-98c0-3d18932fbd70)
 # Geneius: Disease-gene hypothesis and validation powered by Anthropic AI's Claude
-Geneius is a bioinformatical tool that streamlines scientific research by rapidly validating and generating a contextual understanding of gene-disease links based on simple user input prompts. Geneius can currently execute one of two specific tasks:
+Geneius is a bioinformatics command-line tool that streamlines scientific research by rapidly validating and generating a contextual understanding of gene-disease links based on simple user input prompts. Geneius can currently execute one of two specific tasks:
 
 Task 1) Disease-Gene Link Validation: When presented with a hypothetical disease-gene link, Geneius searches through the scientific literature to find compelling evidence supporting this association. It then provides a molecular explanation, complete with a citation to the relevant research papers.
 
