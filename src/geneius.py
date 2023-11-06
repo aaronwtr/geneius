@@ -1,4 +1,4 @@
-from context import PubMedScraper
+from src.context import PubMedScraper
 from models import claude
 from anthropic import HUMAN_PROMPT, AI_PROMPT
 
@@ -8,11 +8,37 @@ import argparse
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Geneius: A tool for biomedical literature search and extraction.")
+    banner = r"""
+   ___ _____ _   _ _____ ___ _   _ ____  
+ / ___| ____| \ | | ____|_ _| | | / ___| 
+| |  _|  _| |  \| |  _|  | || | | \___ \ 
+| |_| | |___| |\  | |___ | || |_| |___) |
+ \____|_____|_| \_|_____|___|\___/|____/ 
+ O       o O       o O      o 0       o 0
+| O   o | | O   o | | O   o | | 0   o | |
+| | O | | | | O | | | | O | | | | 0 | | |
+| o   O | | o   O | | o   O | | o   o | |
+o       O o       O o       O o       0 o
+ """
+
+    intro = r"""
+Welcome to Geneius - a tool for disease-gene evidence search and explanation. Geneius is a powerful command-line tool
+leveraging Anthropic AI's Claude API to help you search through scientific literature and extract evidence for 
+disease-gene associations. 
+
+Please submit any issues or feature requests to our GitHub: https://github.com/aaronwtr/geneius/
+
+For help and usage instructions, run 'geneius --help'.
+"""
+    print(banner)
+    time.sleep(2)
+    print(intro + "\n")
+
+    parser = argparse.ArgumentParser(description="Geneius: A tool for disease-gene evidence search and explanation.")
     parser.add_argument("--task", type=int, choices=[1, 2], required=True, help="Task number (1 or 2)")
     parser.add_argument("--disease", type=str, required=True, help="Disease name")
+    parser.add_argument("--num_records", type=int, required=True, help="Number of records to search through")
     parser.add_argument("--gene", type=str, help="Gene name (only for Task 1)")
-    parser.add_argument("--num_evidence", type=int, help="Number of evidence (only for Task 1)")
     parser.add_argument("--num_genes", type=int, help="Number of genes (only for Task 2)")
     args = parser.parse_args()
 
@@ -23,20 +49,17 @@ def main():
 
     _claude = None
     prompt = None
-    response = None
-    num_records = None
 
     if args.task == 1:
         if args.gene is None or args.num_evidence is None:
-            print("For Task 1, both --gene and --num_evidence are required.")
+            print("For Task 1, both --gene flag is required.")
             return
         gene = args.gene
-        num_evidence = args.num_evidence
 
-        context, num_records = pms.get_literature_context(disease)
+        context, num_records = pms.get_literature_context(disease, args.num_records)
         _claude = claude.Claude()
         prompt = f"{HUMAN_PROMPT} Imagine you are an expert researcher going through the literature to extract " \
-                 f"{num_evidence} pieces of evidence implicating molecular involvement of gene {gene} in disease " \
+                 f"evidence implicating molecular involvement of gene {gene} in disease " \
                  f" {disease}. I want you to explain the molecular mechanism of the gene's involvement in " \
                  f"the disease based on the scientific context I am providing you. In order to " \
                  f"effectively retrieve information, I will provide you with context from scientific literature. You " \
@@ -53,7 +76,7 @@ def main():
             return
         num_genes = args.num_genes
 
-        context, num_records = pms.get_literature_context(disease)
+        context = pms.get_literature_context(disease, args.num_records)
         _claude = claude.Claude()
         prompt = f"{HUMAN_PROMPT} Imagine you are an expert researcher going through the literature to find " \
                  f"{num_genes} genes that are involved in {disease}, and corresponding evidence implicating  " \
@@ -68,10 +91,11 @@ def main():
                  f"'paper title'\n [DOI]:'doi'\n [Explanation]: This paper suggests [gene] is linked to [disease] " \
                  f"[reason]</response> Take care to complete all fields of your response entirely. \n\n" \
                  f"<context>{context}</context> {AI_PROMPT}"
+
     response = _claude.create_completion(prompt)
 
     print(response)
 
-    print(f"Collected and parsed through {num_records} scientific papers in: "
+    print(f"Collected and parsed through {args.num_records} scientific papers in: "
           f"{(math.floor((time.time() - start_time) / 60))} minutes and {math.floor((time.time() - start_time) % 60)} "
           f"seconds.")
