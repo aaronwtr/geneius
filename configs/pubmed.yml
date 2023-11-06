@@ -1,5 +1,5 @@
 user:
-  email: a.wenteler@qmul.ac.uk
+  email: {YOUR_EMAIL}
 
 search:
   retmax: 500
