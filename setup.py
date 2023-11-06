@@ -8,4 +8,9 @@ setup(
         'anthropic',
         'biopython',
     ],
+    entry_points={
+        'console_scripts': [
+            'geneius = geneius.__main__:main'
+        ]
+    }
 )
