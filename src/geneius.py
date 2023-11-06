@@ -75,7 +75,3 @@ def main():
     print(f"Collected and parsed through {num_records} scientific papers in: "
           f"{(math.floor((time.time() - start_time) / 60))} minutes and {math.floor((time.time() - start_time) % 60)} "
           f"seconds.")
-
-
-if __name__ == '__main__':
-    main()
