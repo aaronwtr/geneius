@@ -16,19 +16,19 @@ class PubMedScraper:
             config = yaml.safe_load(file)
         return config
 
-    def search_literature(self, query):
+    @staticmethod
+    def search_literature(query, num_records):
         try:
-            search_results = Entrez.esearch(db="pubmed", term=query, retmax=int(self.config['search']['retmax']),
-                                            sort="relevance")
+            search_results = Entrez.esearch(db="pubmed", term=query, retmax=num_records, sort="relevance")
             record = Entrez.read(search_results)
             pubmed_ids = record['IdList']
-            return pubmed_ids, self.config['search']['retmax']
+            return pubmed_ids
         except Exception as e:
             print(f"An error occurred: {str(e)}")
             return []
 
-    def get_literature_context(self, query):
-        pubmed_ids, num_records = self.search_literature(query)
+    def get_literature_context(self, query, num_records):
+        pubmed_ids = self.search_literature(query, num_records)
         literature_records = []
 
         print("Extracting literature records...")
@@ -40,7 +40,7 @@ class PubMedScraper:
                 doi = "DOI not found"
             literature_records.append([abstract, title, doi])
         context = self.combine_context(literature_records)
-        return context, num_records
+        return context
 
     @staticmethod
     def extract_paper_info(data):
