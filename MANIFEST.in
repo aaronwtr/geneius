@@ -1,3 +1,4 @@
 global-exclude .env
 global-exclude .gitignore
+global-exclude *.pdf
 recursive-exclude data *
