@@ -9,9 +9,9 @@ Task 2) Disease-Gene Link Hypothesis Generation: For users in need of insights a
 Geneius was developed at the Anthropic AI Hackathon in London, on the fourth and the fifth of November 2023. More information here: [https://devpost.com/software/geneius](https://devpost.com/software/geneius)
 
 # Usage 
-**1) Install the package**
+**1) Install the package and requirements**
 
-Run `pip install geneius`
+Run `pip install geneius` and install the packages in the requirements.txt. 
 
 <br>
 
@@ -22,7 +22,13 @@ Go to [console.anthropic.com](console.anthropic.com) to request access to the Cl
 
 <br>
 
-**3) Select a task**
+**3) Set PubMed email in configs/pubmed.yml**
+
+You need to provide an email when querying PubMed. You can add yours in the pubmed.yml file.
+
+<br>
+
+**4) Select a task**
 
 Task 1 = Disease-gene validation, i.e. provide Geneius with a disease and a suspected linked gene, and find evidence in the literature for this link. 
 Task 2 = Disease-gene hypothesis, i.e. provide Geneius with a disease and ask it to hypothesize which N genes might be underpinning this disease, with scientific substantiation.
@@ -31,13 +37,13 @@ Tasks can be selected as `--task=i` where i can be either 1 or 2.
 
 <br>
 
-**4) Set a disease of interest**
+**5) Set a disease of interest**
 
 Store the disease you want to query the literature for in `--disease={str: your_disease}`.
 
 <br>
 
-**5) Set task-dependent flags**
+**6) Set task-dependent flags**
 
 The two different tasks require a different set of flags to allow the program to successfully execute. 
 
@@ -48,4 +54,8 @@ For task 1, set the following flags:
 For task 2, you only need to set the flag:
 - `--num_genes={int: number_of_genes}` (the number of genes you want Geneius to associate with the specified disease.
 
-# TODO: Refactor code to not have email in .yml file.
+<br>
+
+**7) Run Geneius from the command line**
+
+Open a terminal window and run `geneius {FLAGS}`, where the flags are the task-dependent flags as outlined above.
