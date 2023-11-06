@@ -28,7 +28,7 @@ You need to provide an email when querying PubMed. You can add yours in the pubm
 
 <br>
 
-**4) Select a task**
+**4) Select a task (REQUIRED)**
 
 Task 1 = Disease-gene validation, i.e. provide Geneius with a disease and a suspected linked gene, and find evidence in the literature for this link. 
 Task 2 = Disease-gene hypothesis, i.e. provide Geneius with a disease and ask it to hypothesize which N genes might be underpinning this disease, with scientific substantiation.
@@ -37,13 +37,19 @@ Tasks can be selected as `--task=i` where i can be either 1 or 2.
 
 <br>
 
-**5) Set a disease of interest**
+**5) Set a disease flag (REQUIRED)**
 
 Store the disease you want to query the literature for in `--disease={str: your_disease}`.
 
 <br>
 
-**6) Set task-dependent flags**
+**6) Set a num_records flag (REQUIRED)**
+
+Decide how many scientific papers Geneius will look through. Claude's 100k token context window permits a maximum of about 600 papers. `--num_records={int: num_records}`.
+
+<br>
+
+**7) Set task-dependent flags**
 
 The two different tasks require a different set of flags to allow the program to successfully execute. 
 
@@ -56,6 +62,6 @@ For task 2, you only need to set the flag:
 
 <br>
 
-**7) Run Geneius from the command line**
+**8) Run Geneius from the command line**
 
 Open a terminal window and run `geneius {FLAGS}`, where the flags are the task-dependent flags as outlined above.
