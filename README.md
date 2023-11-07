@@ -54,7 +54,6 @@ The two different tasks require a different set of flags to allow the program to
 
 For task 1, set the following flags: 
 - `--gene={str: your_gene}` (the gene you want to query)
-- `--num_evidence={int: number_of_papers}` (the number of papers you want Geneius to return)
 
 For task 2, you only need to set the flag:
 - `--num_genes={int: number_of_genes}` (the number of genes you want Geneius to associate with the specified disease.
