@@ -1,5 +1,5 @@
 from src.context import PubMedScraper
-from models import claude
+from src.claude import Claude
 from anthropic import HUMAN_PROMPT, AI_PROMPT
 
 import time
@@ -55,7 +55,7 @@ For help and usage instructions, run 'geneius --help'.
         gene = args.gene
 
         context, num_records = pms.get_literature_context(disease, args.num_records)
-        _claude = claude.Claude(args.api_key)
+        claude = Claude(args.api_key)
         prompt = f"{HUMAN_PROMPT} Imagine you are an expert researcher going through the literature to extract " \
                  f"evidence implicating molecular involvement of gene {gene} in disease " \
                  f" {disease}. I want you to explain the molecular mechanism of the gene's involvement in " \
@@ -73,7 +73,7 @@ For help and usage instructions, run 'geneius --help'.
         num_genes = args.num_genes
 
         context = pms.get_literature_context(disease, args.num_records)
-        _claude = claude.Claude()
+        claude = Claude(args.api_key)
         prompt = f"{HUMAN_PROMPT} Imagine you are an expert researcher going through the literature to find " \
                  f"{num_genes} genes that are involved in {disease}, and corresponding evidence implicating  " \
                  f"molecular involvement of the genes in disease {disease}. I want you to explain " \
@@ -88,15 +88,13 @@ For help and usage instructions, run 'geneius --help'.
                  f"[reason]</response> Take care to complete all fields of your response entirely. \n\n" \
                  f"<context>{context}</context> {AI_PROMPT}"
 
-    response = _claude.create_completion(prompt)
-
-    print(response)
+    claude.sync_stream(prompt)
 
     print(f"Collected and parsed through {args.num_records} scientific papers in: "
           f"{(math.floor((time.time() - start_time) / 60))} minutes and {math.floor((time.time() - start_time) % 60)} "
           f"seconds.")
 
 
-# TODO - add API arg option
-#  - make claude stream output instead of returning it all at once
-#  - upload to pypi with twine
+# TODO:
+#  - change entrypoint from geneius.__main__:main to __main__:main
+#  - Redo upload
