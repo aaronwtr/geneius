@@ -6,6 +6,8 @@ Task 1) Disease-Gene Link Validation: When presented with a hypothetical disease
 
 Task 2) Disease-Gene Link Hypothesis Generation: For users in need of insights about a specific disease, Geneius constructs a comprehensive disease context by extracting relevant information from the scientific literature. Claude searches and retrieves this literature, presenting users with a curated list of genes implicated in the disease based on scientific research. Furthermore, it elucidates the molecular mechanisms underpinning the involvement of these genes in the disease.
 
+Tasks can be selected by specifying args. For task 1, you will need to specify a `--gene`, for task 2 you will need to specify `--num_genes`.
+
 Geneius was developed at the Anthropic AI Hackathon in London, on the fourth and the fifth of November 2023. More information here: [https://devpost.com/software/geneius](https://devpost.com/software/geneius)
 
 # Usage 
@@ -28,12 +30,9 @@ You need to provide an email when querying PubMed. You can add yours in the pubm
 
 <br>
 
-**4) Select a task (REQUIRED)**
+**4) Put in your Anthropic API key (REQUIRED)**
 
-Task 1 = Disease-gene validation, i.e. provide Geneius with a disease and a suspected linked gene, and find evidence in the literature for this link. 
-Task 2 = Disease-gene hypothesis, i.e. provide Geneius with a disease and ask it to hypothesize which N genes might be underpinning this disease, with scientific substantiation.
-
-Tasks can be selected as `--task=i` where i can be either 1 or 2.
+Add the Anthropic API key in the `--api_key` flag. 
 
 <br>
 
@@ -55,7 +54,6 @@ The two different tasks require a different set of flags to allow the program to
 
 For task 1, set the following flags: 
 - `--gene={str: your_gene}` (the gene you want to query)
-- `--num_evidence={int: number_of_papers}` (the number of papers you want Geneius to return)
 
 For task 2, you only need to set the flag:
 - `--num_genes={int: number_of_genes}` (the number of genes you want Geneius to associate with the specified disease.
