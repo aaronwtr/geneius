@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='geneius',
-    version='1.3',
+    version='1.4',
     packages=['src'],
     url='https://github.com/aaronwtr/geneius',
     description='A tool for disease-gene evidence search and explanation',
