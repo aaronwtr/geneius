@@ -35,9 +35,9 @@ For help and usage instructions, run 'geneius --help'.
     print(intro + "\n")
 
     parser = argparse.ArgumentParser(description="Geneius: A tool for disease-gene evidence search and explanation.")
-    parser.add_argument("--task", type=int, choices=[1, 2], required=True, help="Task number (1 or 2)")
     parser.add_argument("--disease", type=str, required=True, help="Disease name")
     parser.add_argument("--num_records", type=int, required=True, help="Number of records to search through")
+    parser.add_argument("--api_key", type=str, required=True, help="Anthropic API key")
     parser.add_argument("--gene", type=str, help="Gene name (only for Task 1)")
     parser.add_argument("--num_genes", type=int, help="Number of genes (only for Task 2)")
     args = parser.parse_args()
@@ -50,14 +50,12 @@ For help and usage instructions, run 'geneius --help'.
     _claude = None
     prompt = None
 
-    if args.task == 1:
-        if args.gene is None or args.num_evidence is None:
-            print("For Task 1, both --gene flag is required.")
-            return
+    if args.gene:
+        # Task 1
         gene = args.gene
 
         context, num_records = pms.get_literature_context(disease, args.num_records)
-        _claude = claude.Claude()
+        _claude = claude.Claude(args.api_key)
         prompt = f"{HUMAN_PROMPT} Imagine you are an expert researcher going through the literature to extract " \
                  f"evidence implicating molecular involvement of gene {gene} in disease " \
                  f" {disease}. I want you to explain the molecular mechanism of the gene's involvement in " \
@@ -70,10 +68,8 @@ For help and usage instructions, run 'geneius --help'.
                  f"paper suggests [gene] is linked to [disease] [reason]</response> Take care to complete all " \
                  f"fields of your response entirely. \n\n  <context>{context}</context> {AI_PROMPT}"
 
-    elif args.task == 2:
-        if args.num_genes is None:
-            print("For Task 2, --num_genes is required.")
-            return
+    else:
+        # Task 2
         num_genes = args.num_genes
 
         context = pms.get_literature_context(disease, args.num_records)
@@ -99,3 +95,8 @@ For help and usage instructions, run 'geneius --help'.
     print(f"Collected and parsed through {args.num_records} scientific papers in: "
           f"{(math.floor((time.time() - start_time) / 60))} minutes and {math.floor((time.time() - start_time) % 60)} "
           f"seconds.")
+
+
+# TODO - add API arg option
+#  - make claude stream output instead of returning it all at once
+#  - upload to pypi with twine

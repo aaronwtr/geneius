@@ -6,25 +6,10 @@ import yaml
 
 
 class Claude(Anthropic):
-    def __init__(self):
-        self.config = self.config()
+    def __init__(self, api_key=None):
+        self.api_key = api_key
 
-        super().__init__(api_key=self.get_api_key())
-
-    def get_api_key(self):
-        load_dotenv(dotenv_path=self.get_api_path())
-        api_key = os.getenv("CLAUDE_SECRET")
-        return api_key
-
-    def get_api_path(self):
-        api_path = self.config['paths']['secret']
-        return api_path
-
-    @staticmethod
-    def config():
-        with open('configs/claude.yml', 'r') as file:
-            config = yaml.safe_load(file)
-        return config
+        super().__init__(api_key=self.api_key)
 
     def create_completion(self, prompt):
         completion = self.completions.create(
@@ -33,3 +18,18 @@ class Claude(Anthropic):
             prompt=prompt,
         )
         return completion.completion
+
+    # def get_api_key(self):
+    #     load_dotenv(dotenv_path=self.get_api_path())
+    #     api_key = os.getenv("CLAUDE_SECRET")
+    #     return api_key
+
+    # def get_api_path(self):
+    #     api_path = self.config['paths']['secret']
+    #     return api_path
+
+    # @staticmethod
+    # def config():
+    #     with open('configs/claude.yml', 'r') as file:
+    #         config = yaml.safe_load(file)
+    #     return config
