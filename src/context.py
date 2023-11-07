@@ -12,7 +12,7 @@ class PubMedScraper:
 
     @staticmethod
     def config():
-        with open('geneius/configs/pubmed.yml', 'r') as file:
+        with open('configs/pubmed.yml', 'r') as file:
             config = yaml.safe_load(file)
         return config
 
