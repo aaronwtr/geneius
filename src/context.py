@@ -1,20 +1,12 @@
 from Bio import Entrez
 
-import yaml
 from tqdm import tqdm
 
 
 class PubMedScraper:
     def __init__(self):
-        self.config = self.config()
-        self.email = self.config['user']['email']
+        self.email = '123@example.com'
         Entrez.email = self.email
-
-    @staticmethod
-    def config():
-        with open('configs/pubmed.yml', 'r') as file:
-            config = yaml.safe_load(file)
-        return config
 
     @staticmethod
     def search_literature(query, num_records):
